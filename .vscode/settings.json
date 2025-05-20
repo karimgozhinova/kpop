@@ -1,0 +1,16 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5433,
+      "driver": "PostgreSQL",
+      "name": "kpopdb",
+      "username": "postgres",
+      "database": "kpopdb",
+      "password": "postgres"
+    }
+  ],
+  "java.compile.nullAnalysis.mode": "automatic"
+}

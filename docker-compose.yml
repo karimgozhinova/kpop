@@ -1,0 +1,51 @@
+services:
+  maven:
+    image: maven:3.8-openjdk-17 # Альтернативный образ с Maven и OpenJDK 17
+    working_dir: /app
+    volumes:
+      - ./backend:/app # Монтируем папку backend
+    command: mvn clean install -f /app/pom.xml # Выполняем Maven build
+    networks:
+      - mynetwork
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - mynetwork
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: . # Указываем контекст сборки
+      dockerfile: backend/Dockerfile # Путь к Dockerfile бэкенда
+    ports:
+      - "8080:8080" # Пробрасываем порты
+    environment:
+      SPRING_PROFILES_ACTIVE: dev # Устанавливаем профиль для Spring
+    depends_on:
+      - postgres # Зависим от Postgres
+    networks:
+      - mynetwork
+    volumes:
+      - ./backend/target:/app/target # Монтируем target в контейнер
+
+  postgres:
+    image: postgres:latest # Используем последнюю версию Postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kpopdb
+    ports:
+      - "5433:5432" # Пробрасываем порты
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

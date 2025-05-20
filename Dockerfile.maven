@@ -1,0 +1,14 @@
+# Используем OpenJDK 17
+FROM openjdk:17
+
+# Устанавливаем Maven
+RUN apt-get update && apt-get install -y maven
+
+# Устанавливаем рабочую директорию в контейнере
+WORKDIR /app
+
+# Копируем файл pom.xml
+COPY ./backend/pom.xml /app/pom.xml
+
+# По умолчанию запускаем Maven команду
+ENTRYPOINT ["mvn"]
